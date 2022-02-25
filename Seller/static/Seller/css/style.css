@@ -1,0 +1,13 @@
+body{
+    overflow-x: hidden;
+}
+#slider-nav{
+    height: 100vh;
+    background-color: blue;
+    
+    padding: 10px 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+}

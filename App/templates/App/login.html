@@ -17,18 +17,20 @@
             <p class='text-{{msg.tags}}'>{{msg}}</p>
             {% endfor %}
             {% endif %}
-            <p>To keep conected with us please login with your personal informations</p>
+            <p style="font-weight: 500">To keep conected with us please login with your personal informations</p>
             {{form.username|as_crispy_field}}
             
 
             {{form.password|as_crispy_field}}
+            <input type="checkbox" name="showpass" id="showpass">
+            <span>Show password</span>
             <a href="{% url 'Passwordreset' %}" id="forgetpassowrd" class="float-end text-decoration-none">Foreget Password?</a>
             {% endblock mainblock %}
-            <input type="submit" value="Login" class="btn btn-primary px-3 my-1 btn-outline-none">
+            <input type="submit" value="Login" style="letter-spacing:1px;" class="btn btn-primary d-block fw-bold px-3 my-1 btn-outline-none">
         </div>
         {% block loginfooter %}
         <div>
-            <p class="Notmemmber">Not a  member? <a href="{% url 'register' %}" class="fw-bold">Signup</a></p>
+            <p class="Notmemmber fw-bold">Not a  member? <a href="{% url 'register' %}" class="fw-bold">Signup</a></p>
         </div>
         {% endblock loginfooter %}
         

@@ -22,8 +22,8 @@
       <div class="container-fluid d-flex align-items-center">
         <a href="" class="text-light menu-icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft"><i class="fa-solid fa-bars"></i></a>
         <div class="search ms-1 ">
-          <a href="" class="my-auto d-lg-block d-none text-decoration-none fw-bold text-light">DjangoEcommerce</a>
-          <form action="/Home/" method="post" id="search-field"  class="w-50 d-flex justify-content-between">
+          <a href="" class="my-auto d-lg-block d-none text-decoration-none h4 fw-bold text-light">DjangoEcommerce</a>
+          <form action="/" method="post" id="search-field"  class="w-50 d-flex justify-content-between">
             {% csrf_token %}
             <input type="search" name="search" id="search" placeholder="Search anything you want" class="form-control w-100">
             <button class="btn btn-light ms-1"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -37,7 +37,7 @@
             
             <a href="{% url 'login' %}" class="text-light fw-bold text-decoration-none link-user">Login</a>
             <a href="{% url 'register' %}" class="text-light ms-1 fw-bold link-user  text-decoration-none">Register</a>
-            <a href="#" class="text-light ms-1 text-decoration-none fw-bold">Seller</a>
+            <a href="{% url 'dashboard' %}" class="text-light ms-1 text-decoration-none fw-bold">Seller</a>
             </div>
           {% else %}
           <a href="#" class="my-auto ms-5 d-lg-flex d-md-flex d-none" data-bs-container="body" data-bs-toggle="popover" data-container="body" data-bs-placement="bottom" data-bs-trigger="focus" data-bs-html="true" data-bs-content="<div><a href='#' class='dropdown-item'>Myaccount</a><a href='{% url 'logout' %}' class='dropdown-item'>Logout</a></div>">
@@ -56,12 +56,13 @@
           
         </div>
       </div>
-      <div class="offcanvas offcanvas-start " tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas offcanvas-start " style="color: #3B3B98 " tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
-           <h5 id="offcanvasRightLabel">DjangoEcommerce</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+           <h5 id="offcanvasRightLabel" >DjangoEcommerce</h5>
+            <button type="button" style="color: #3B3B98 " class="btn-close  text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
          </div>
          <div class="offcanvas-body">
+           
    
         </div>
       </div>
@@ -74,7 +75,7 @@
 
 </div>
 
-<nav class="d-lg-none fixed-bottom " id="bottom-nav"> 
+<nav class="d-md-none fixed-bottom  " id="bottom-nav"> 
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
