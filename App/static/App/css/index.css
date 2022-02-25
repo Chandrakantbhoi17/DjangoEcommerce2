@@ -1,0 +1,115 @@
+body,html{
+    height: 100%;
+    box-sizing: border-box;
+    background: #d1d8e0;
+}
+:root{
+    --mycolor: #e84393 !important;
+}
+#mainnav{
+    width: 100%;
+    height: 42px;
+    background: #3B3B98;
+}
+#bottom-nav{
+
+    background: #3B3B98;
+    height: 42px;
+    width: 100%;
+    
+}
+.mainbody{
+    padding-bottom: 42px;
+    
+   
+    
+}
+.search{
+    display: inline-flex;
+    width:  90% !important;
+}
+.menu-icon{
+    font-size: 25px;
+}
+#search-field{
+    margin-left: 50px;
+}
+.asteriskField{
+    display: none;
+}
+.invalid-feedback{
+    margin-bottom: 0;
+}
+#forgetpassowrd{
+    font-weight: 600;
+    letter-spacing: 1px;
+
+}
+
+#login-box{
+    width: 400px;
+    background: #dff9fb;
+    margin-top: 10px;
+    height: fit-content;
+    border-radius: 10px;
+   
+ 
+    padding: 10px 10px;
+}
+#Signup-box{
+    width: 500px;
+    background: #dff9fb;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+}
+#Signup-box label,#login-box label
+{
+    font-weight: bold;
+}
+#profile-pic{
+    width: 25px;
+    height: 25px;
+    background-color: pink;
+    border-radius: 50%;
+}
+
+#offcanvasLeft{
+    background: var(--mycolor);
+}
+#signuporlogin a::after{
+    color: var(--mycolor);
+    background: var(--mycolor);
+    position: relative;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 10px;
+    
+
+}
+   
+
+
+@media(min-width :768px){
+    #login-box,#Signup-box{
+        margin-top: 50px;
+    }
+    
+    
+}
+
+
+@media(max-width:765px){
+    
+    #search-field{
+    margin-left:  0;
+    width: 100% !important;
+    }
+    #login-box{
+        width: 100%;
+    }
+    #Signup-box{
+        width: 100%;
+    }
+}
