@@ -1,43 +1,78 @@
 {% extends 'App/base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block customstyle %}
+<style>
+    #login-box label{
+        color: #fff;
+    }
+    #login-box label{
+
+    }
+    
+@media(max-width:765px){
+     #login-box label,#login-box span,#link-signup p{
+         font-size:14px;
+        
+    }
+    #login-box input{
+        padding:0 2px;
+    }
+    
+    
+
+}
+ 
+
+</style>
+{% endblock customstyle %}
 {% block mainbody %}
+
 {{ block.super }}
 <div class="container h-100 d-flex justify-content-center align-items-center ">
-    <form action="" novalidate method="post">
-        {% csrf_token %}
+    
+        
     <div id="login-box" class="d-flex  flex-column">
-        <p class="h5">{% block contenttittle %}Login{% endblock contenttittle %} To DjangoEcommerce</p>
+        <p class="h3" style="color:red">{% block contenttittle %}Login{% endblock contenttittle %}</p>
 
         <div class="mt-3" >
+            <form action="" novalidate method="post">
+            {% csrf_token %}
             {% block mainblock %}
-            <p class="text-danger fw-bold">{{form.non_field_errors|striptags}}</p>
+            <p class="text-danger fw-bold" style="font-size:14px;">{{form.non_field_errors|striptags}}</p>
             {% if messages %}
             {% for msg in messages %}
             <p class='text-{{msg.tags}}'>{{msg}}</p>
             {% endfor %}
             {% endif %}
-            <p style="font-weight: 500">To keep conected with us please login with your personal informations</p>
             {{form.username|as_crispy_field}}
             
 
             {{form.password|as_crispy_field}}
             <input type="checkbox" name="showpass" id="showpass">
-            <span>Show password</span>
+            <span class="text-light">Show password</span>
             <a href="{% url 'Passwordreset' %}" id="forgetpassowrd" class="float-end text-decoration-none">Foreget Password?</a>
             {% endblock mainblock %}
-            <input type="submit" value="Login" style="letter-spacing:1px;" class="btn btn-primary d-block fw-bold px-3 my-1 btn-outline-none">
+            <input type="submit" value="Login" style="letter-spacing:1px; background:red;"  class="btn w-100 text-light   d-block fw-bold px-3 my-1">
+         </form>
         </div>
         {% block loginfooter %}
-        <div>
-            <p class="Notmemmber fw-bold">Not a  member? <a href="{% url 'register' %}" class="fw-bold">Signup</a></p>
+        <div id="link-signup"> 
+            <p style="color:red">Not a  member? <a href="{% url 'register' %}" class="fw-bold">Signup</a></p>
         </div>
         {% endblock loginfooter %}
         
 
 
     </div>
-    </form>
+   
 
 </div>
+
 {% endblock mainbody %}
+{% block footer %}
+<div class="w-100 bg-danger " styel="height:100px !important">
+    aa
+
+</div>
+{% endblock footer %}

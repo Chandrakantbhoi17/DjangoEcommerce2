@@ -1,0 +1,49 @@
+{% extends 'App/base.html' %}
+{% load static %}
+{% block customlink %}
+<style>
+  .slide .carousel-inner  .carousel-item{
+    max-height: 400px;
+    
+
+  }
+  #slide .carousel-inner  .carousel-item img{
+    height: 100%;
+    width: 100%;
+
+  }
+  h1{
+    color:red;
+  }
+
+
+
+</style>
+{% endblock customlink %}
+{% block mainbody %}
+
+<div id="carouselExampleInterval"  class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for item in slider %}
+    <div class="carousel-item {% if forloop.counter is 1 %}active{% endif %}">
+      <img src="{{item.image.url}}" class="d-block w-100" alt="">
+     
+    </div>
+    {% endfor %}
+    
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
+
+{% endblock mainbody %}
+ 

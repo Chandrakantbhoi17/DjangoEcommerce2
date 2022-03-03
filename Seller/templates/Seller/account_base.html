@@ -1,0 +1,154 @@
+{% extends 'Seller/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block mainbody %}
+{% block customstyle %}
+
+<style>
+   .btn:focus {
+    outline: none !important;
+
+}
+#id_shop_Address{
+    height: 100px;
+}
+hr{
+    margin: 0px;
+}
+.btn{
+	box-shadow: none !important;
+}
+#Changingbtn{
+    background:#000;
+   
+}
+#Changingbtn a{
+    color: #fff;
+    border-bottom: 1px solid #dcdde1;
+
+}
+.btn:active{
+			border: solid 1px #ff4500 !important;
+			border-radius: 0;
+}
+#hint_id_username{
+    display: none;
+}
+#Mycard{
+    background: #000;
+}
+#Mycard label{
+    color:#fff;
+    font-weight:600;
+    
+}
+@media(max-width: 500px){
+    .Setting-header{
+        font-size: 18px;
+    }
+    
+
+
+}
+#account{
+    color:red !important;
+}
+
+
+</style>
+{% endblock customstyle %}
+<div class="row">
+    <div class="col-lg-3 mt-1">
+        <h3>DjangoEcommerce</h3>
+    </div>
+    <div class="col-lg-9 mt-1">
+        <h1 class="text-center Setting-header">Seller Account Setting</h1>
+        
+    </div>
+    <div class="col-md-3 mt-2">
+        <div class="card" id="Changingbtn">
+           
+                <a href="{% url 'accountsetting' %}" class="btn border-1" >UpdateProfile</a>
+               
+                <a href="{% url 'bankdetail' %}" class="btn" >Bank Details</a>
+                <a href="{% url 'changepass' %}" class="btn"> ChangePassword</a>
+           
+        </div>
+
+    </div>
+    <div class="col-md-9 mt-3">
+       <div class="container-fluid p-0 ">
+           {% block accountcontent %}
+           <form action="" novalidate method='post' enctype="multipart/form-data">
+               {% csrf_token %}
+           <div class="card " id="Mycard">
+               <h4 class="ms-1" style="color:red;">Your details</h4>
+               <hr>
+           <div class="row px-2 py-2">
+               
+            <div class="col-md-4">
+                {{u_form.first_name|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+                {{u_form.last_name|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+                {{u_form.username|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+                {{s_form.mobile|as_crispy_field}}
+            </div>
+             <div class="col-md-4">
+                {{s_form.alternate_mobile|as_crispy_field}}
+            </div>
+          
+            <div class="col-md-4">
+                {{s_form.pincode|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+                {{s_form.locality|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+                {{s_form.city|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+                {{s_form.landmark|as_crispy_field}}
+            </div>
+             <div class="col-md-4">
+                {{s_form.state|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+                {{s_form.shop_Address|as_crispy_field}}
+            </div>
+            <div class="col-md-4">
+            {{s_form.gst_Number|as_crispy_field}}
+
+            </div>
+            <div class="col-md-4">
+                {{s_form.photo|as_crispy_field}}
+            </div><div class="col-md-4">
+                {{s_form.shop_Name|as_crispy_field}}
+            </div>
+            
+            <div class="col-12 mt-md-4  mt-sm-1 mt-2">
+            <input type="submit" style="background:red;" value="Save" id="" class="w-100 btn btn-dark ">
+
+            </div>
+
+            
+        
+             
+             
+           </div>
+       
+           </div>
+           </form>
+           {% endblock accountcontent %}
+       </div>
+    </div>
+
+    
+</div>
+
+
+{% endblock mainbody %}

@@ -1,13 +1,33 @@
-body{
-    overflow-x: hidden;
+:root{
+     --major-color:#3B3B98;
 }
-#slider-nav{
-    height: 100vh;
-    background-color: blue;
+body,html{
     
-    padding: 10px 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
+    background: #d1d8e0;
+    overflow-x: hidden !important;
+    height: 100%;
+
+}
+
+
+#sidenav{
+  width: 50px;
+  /* background: var(--major-color); */
+  background: #000;
+}
+#maincontainer{
+    margin-left: 50px;
+}
+#sidenav a i{
+    font-size: 25px;
+}
+.asteriskField{
+    display: none;
+}
+@media(max-width:600px){
+    #sidenav a i{
+    font-size:  18px;
+}
     
 }
+

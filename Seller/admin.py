@@ -1,3 +1,14 @@
 from django.contrib import admin
+from .models import Product, SellerDetail,SellerSlider,Category,SubCategory,Productsize
 
-# Register your models here.
+admin.site.register(SellerDetail)
+admin.site.register(SellerSlider)
+admin.site.register(Category)
+admin.site.register(SubCategory)
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display=['product_id2','category','subcategory','price','price_not',]
+
+@admin.register(Productsize)
+class ProductSizeAdmin(admin.ModelAdmin):
+    list_display=['product','product_size','product_quantity']

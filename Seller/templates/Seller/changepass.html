@@ -1,0 +1,38 @@
+{% extends 'Seller/account_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block customstyle %}
+{{ block.super}}
+<style>
+    #Mycard{
+    background: #000;
+   
+}
+ #Mycard form label, #Mycard form ul li{
+      color: #fff;
+ }
+  #Mycard input[type="submit"]{
+      background:red;
+  }
+
+</style>
+
+{% endblock customstyle %}
+{% block accountcontent %}
+<div class="row"></div>
+
+<div class="card px-2 py-2" id='Mycard'>
+    <h4 class="text-light">Change Your Password</h4>
+    <form action="" method="post" novalidate>
+        {% csrf_token %}
+        {{form|crispy}}
+    
+    <div class="col-12 mt-2">
+        <input type="submit" class="w-100 btn btn-dark" value="Change">
+    </div>
+    </form>
+</div>
+
+
+
+{% endblock accountcontent %}

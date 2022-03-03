@@ -1,0 +1,167 @@
+{% extends 'Seller/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block customstyle %}
+
+<style>
+    #addprod{
+        color: red !important;
+    }
+    #Mycard{
+        padding:10px;
+        background: #000;
+    }
+    #Mycard label{
+        color:#fff;
+        font-weight:600;
+    }
+    #id_Description{
+        height:100px;
+    }
+</style>
+{% endblock customstyle %}
+
+{% block mainbody %}
+<h1>Add Product</h1>
+<form action="" method='post' novalidate enctype="multipart/form-data">
+{% csrf_token %}
+
+<div id="Mycard" class="card">
+<div class="row">
+     <div class="col-md-5">
+        {{addprod.product_name|as_crispy_field}}
+    </div>
+    <div class="col-md-3">
+        <label for="id_category">Category</label>
+        <select name='category' onchange="GetSubcategory(this.value)" class="form-select" id="id_category">
+           <option  value='0' selected >-----</option>
+           {% for item  in category %}
+                 
+                <option value={{item.pk}}>{{item.categoey_name}}</option>
+           {% endfor %}
+        </select>
+        <p style="color: red !important;margin: 0;">{{addprod.category.errors|striptags}}</p>
+        
+        
+        
+        
+    </div>
+    <div class="col-md-3">
+        <label for="id_subcategory">Subcategory</label>
+        <select name='subcategory' class="form-select" id="id_subcategory">
+           <option value="0"  selected>----</option>
+
+           
+        </select>
+        <p style="color: red !important;margin: 0;" class="errors">{{addprod.subcategory.errors|striptags}}</p>
+        
+    </div>
+    
+    
+   
+   
+    <div class="col-md-3">
+        {{addprod.price|as_crispy_field}}
+    </div>
+    <div class="col-md-3">
+        {{addprod.price_not|as_crispy_field}}
+    </div>
+    <div class="col-md-6 mb-1">
+         {{addprod.gst|as_crispy_field}}
+     </div>
+    <div class="col-md-3 mb-1">
+        <label for="id_for_img">Image</label>
+        <input type="file" required name='image' id="id_for_img" accept="images/*"  alt="img" class="form-control clearablefileinput">
+        <p class="text-danger errors" style="margin: 0;">{{addprod.image.errors|striptags}}</p>
+    </div>
+ 
+   
+     <div class="col-md-5 mb-2">
+        {{addprod.Description|as_crispy_field}}
+    </div>
+    <div class="col-md-3">
+      <label>Size and Quantity</label>
+      <div class="d-flex align-items-center quan">
+        <input type="text" placeholder="Size"  name="prodsize1" class="form-control" >
+        <input type="text" placeholder="Quantity" name="prodquantity1" class="form-control">
+        <i class=" text-light  ms-1 fa-solid fa-plus" style="font-size:18px;" onclick="AddSize()"></i>
+      </div>
+    </div>
+   <div class="row mx-0" id="AddSize">
+      
+   </div>
+
+   </div>
+    <input type="hidden" name="Sizeitems" id="Sizeitems" value="1">
+
+    
+   
+    <div class="col-12">
+        <input type="submit" onclick="AddProd()" style="background:red;" class="btn btn-dark mt-1 w-100" value="Add">
+    </div>
+
+</div>
+<div>
+</form>
+
+{% endblock mainbody %}
+{% block customscript %}
+<script>
+    var sizeofqunatity=1
+    function AddSize(){
+        sizeofqunatity++;
+        
+        let container=document.getElementById('AddSize');
+        let ele=document.createElement('div')
+        ele.className='col-md-3 px-0   text-light '
+        ele.innerHTML=`
+         <label>Size and Quantity</label>
+         <div class="d-flex align-items-center quan">
+         <input type="text" placeholder="Size"  name="prodsize${sizeofqunatity}" class="form-control">
+         <input type="text" placeholder="Quantity" name="prodquantity${sizeofqunatity}" class="form-control">
+         <i class=" text-light  ms-1 fa-solid fa-plus" style="font-size:18px;" onclick="AddSize()"></i>
+         </div>`
+        container.appendChild(ele)
+        document.getElementById('Sizeitems').value=sizeofqunatity;
+
+    }
+     
+        
+        
+        
+
+   
+
+    function GetSubcategory(value){
+
+        let csrftoken=document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        
+
+        
+       $.ajax({
+            url:"/Seller/Getsubcategory",
+            method:'GET',
+            data:{
+                catid:value
+            },
+            
+            success:function(data){
+                $('#id_subcategory').html(data)
+                
+            },
+            error:function(err){
+                console.log(err)
+                
+
+            }
+        })}
+
+
+
+
+
+
+    
+     
+</script>
+{% endblock customscript %}
