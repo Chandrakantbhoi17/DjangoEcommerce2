@@ -37,8 +37,10 @@ def Home(request):
         return redirect('dashboard')
      slider=SellerSlider.objects.all()
      category=Category.objects.all()
+     mens=Category.objects.all().first()
 
-     return render(request,'App/index.html',{'category':category,'slider':slider})
+
+     return render(request,'App/index.html',{'category':category,'slider':slider,'mens':mens})
 
 def Login(request):
    
@@ -93,6 +95,7 @@ def SellersignUp(request):
       
         if form.is_valid():
             form.save()
+            uname=request.POST.get('username')
 
             
 

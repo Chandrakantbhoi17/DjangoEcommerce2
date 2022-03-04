@@ -25,7 +25,7 @@ def AddProduct(request):
     if request.method=='POST':
        
         addprod=AddproductForm(request.POST,request.FILES)
-        p_name=request.POST.get('product_name')
+        p_name=request.POST.get('pproductname')
         shop=request.user
         category=request.POST.get('category')
         subcategory=request.POST.get('subcategory')
@@ -41,8 +41,8 @@ def AddProduct(request):
         if bool(int(category)) and bool(int(subcategory)) and  description and  img:
                
                
-               category=Category.objects.get(id=category)
-               subcategory=SubCategory.objects.get(id=subcategory)
+               category=Category.objects.get(pk=category)
+               subcategory=SubCategory.objects.get(pk=subcategory)
                if Product.objects.all():
                   product_id2=Product.objects.all().last().product_id2
                   pd=product_id2[2:]
@@ -54,8 +54,9 @@ def AddProduct(request):
                for i in range(1,int(sizeitem)+1):
                    product_size=request.POST.get(f'prodsize{i}')
                    product_quantity=request.POST.get(f'prodquantity{i}')
-                   Productsize(product=product,product_size=product_size,product_quantity=product_quantity).save()
-                
+  
+                   Productsize(product=product,productname=productname,product_size=product_size,product_quantity=int(product_quantity)).save()
+               messages.success(request,'Product Added')
                      
 
     else:

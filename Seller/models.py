@@ -68,6 +68,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     categoryname=models.ForeignKey(Category,on_delete=models.CASCADE)
     sub_name = models.CharField(max_length=50, default="")
+	
 
 	
 	
@@ -86,7 +87,7 @@ class Product(models.Model):
 	product_id= models.BigAutoField(primary_key=True)
 	product_id2= models.CharField(max_length=100,default='')
 	shop=models.ForeignKey(User, on_delete=models.CASCADE,default='')
-	product_name= models.CharField(max_length=100)
+	productname= models.CharField(max_length=100)
 	category=models.ForeignKey(Category,on_delete=models.CASCADE)
 	subcategory=models.ForeignKey(SubCategory, default="", verbose_name="Category", on_delete=models.SET_DEFAULT, null=True)
 	price=models.IntegerField(default=0)
@@ -105,7 +106,7 @@ class SellerSlider(models.Model):
 class Productsize(models.Model):
 	product=models.ForeignKey(Product,on_delete=models.CASCADE)
 	product_size=models.CharField(max_length=2,null=True,blank=True)
-	product_quantity=models.PositiveIntegerField(null=True,blank=True)
+	product_quantity=models.PositiveIntegerField(default=0,null=True)
 
 
 	
