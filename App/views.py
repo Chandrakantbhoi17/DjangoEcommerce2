@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, QueryDict
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate,login,logout
 
-from Seller.models import SellerSlider
+from Seller.models import SellerSlider,Trend
 from Seller.forms import SellerSignUp
 from .forms import UserAuthenticationForm,RegisterForm
 from django.contrib import messages
@@ -12,7 +12,7 @@ import smtplib
 from django.contrib.auth.models import User
 import random 
 from .models import EmailOtp
-from Seller.models import Category,SubCategory
+from Seller.models import Category,SubCategory,Product,SellerDetail
 from django.conf import settings
 
 
@@ -37,10 +37,9 @@ def Home(request):
         return redirect('dashboard')
      slider=SellerSlider.objects.all()
      category=Category.objects.all()
-     mens=Category.objects.all().first()
-
-
-     return render(request,'App/index.html',{'category':category,'slider':slider,'mens':mens})
+     AllProd=Category.objects.all()[:2]
+     trend=Trend.objects.all()
+     return render(request,'App/index.html',{'AllProd':AllProd,'category':category,'range':range(1,5),'slider':slider,'trend':trend})
 
 def Login(request):
    
@@ -91,16 +90,12 @@ def SellersignUp(request):
     if request.method=='POST':
     
         form=SellerSignUp(request.POST)
-     
-      
         if form.is_valid():
             form.save()
             uname=request.POST.get('username')
-
-            
-
             user=User.objects.filter(username=uname).first()
             user.is_staff=True
+            SellerDetail(user=user).save()
             user.save()
     else:
         form=SellerSignUp()
@@ -112,3 +107,32 @@ def SellersignUp(request):
 
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

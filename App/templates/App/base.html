@@ -70,7 +70,7 @@
          <div class="offcanvas-body">
            <ul class="list-unstyled ">
              {% for item in category  %}
-             <li class="fw-bold dropdown-toggle" style="cursor: pointer; color:red;" data-bs-toggle="collapse" data-bs-target="#collapseExample{{forloop.counter}}">{{item}}</li>
+             <li class="fw-bold dropdown-toggle" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#collapseExample{{forloop.counter}}">{{item}}</li>
              <ul class="list-unstyled collapse" id="collapseExample{{forloop.counter}}">
              {% for sub in item.subcategory_set.all  %}
              <li  style="cursor: pointer; " class="ms-1 fw-bold"><a href="{% url 'filter' cat=item sub=sub.sub_name %}" class="text-decoration-none text-light">{{sub.sub_name}}</a></li>
@@ -92,8 +92,10 @@
 </nav>
 <div class="mainbody">
 {% block mainbody %}
-{% endblock mainbody %}
 
+{% endblock mainbody %}
+{% block footer %}
+{% endblock footer %}
 
 </div>
 

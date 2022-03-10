@@ -96,6 +96,8 @@ class Product(models.Model):
 	gst = models.CharField(default='0',max_length=3,choices=GST_CHOICES)
 	pub_date = models.DateField(auto_now=True)
 	image=models.ImageField(upload_to='products/images', default="",null=True)
+	def __str__(self):
+		return self.productname
 
 
 class SellerSlider(models.Model):
@@ -108,5 +110,9 @@ class Productsize(models.Model):
 	product_size=models.CharField(max_length=2,null=True,blank=True)
 	product_quantity=models.PositiveIntegerField(default=0,null=True)
 
+class Trend(models.Model):
+	product=models.OneToOneField(Product,on_delete=models.CASCADE)
+	
+	
 
 	

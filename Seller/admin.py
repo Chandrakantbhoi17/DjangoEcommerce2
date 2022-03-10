@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, SellerDetail,SellerSlider,Category,SubCategory,Productsize
+from .models import Product, SellerDetail,SellerSlider,Category,SubCategory,Productsize,Trend
 
 admin.site.register(SellerDetail)
 admin.site.register(SellerSlider)
@@ -12,3 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Productsize)
 class ProductSizeAdmin(admin.ModelAdmin):
     list_display=['product','product_size','product_quantity']
+
+@admin.register(Trend)
+class Trend(admin.ModelAdmin):
+    list_diplay=['product']
