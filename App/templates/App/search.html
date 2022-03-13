@@ -1,0 +1,30 @@
+{% extends 'App/viewall.html' %}
+{% load static %}
+{% block customlink %}
+<link rel="stylesheet" href="{% static 'App/css/viewall.css' %}">
+{% endblock customlink %}
+{% block mainbody %}
+<div class="conatiner-fluid">
+       <div class="row justify-content-center">
+        {% for product in products %}
+          <div class="prodsm mt-1 ">
+              <div class="wrapper  ">
+                <a href="{% url 'productview' product.product_id %}" class="text-decoration-none text-center ">
+                <div class="img-box ">
+                   <img src="{{product.image.url}}" alt="" class="img-fluid img-responsive">
+                </div>
+                <div class="content-box ">
+                  <p>{{product.productname|truncatechars:20}}</p>
+                </div>
+                <div class="price-box">
+                   <span class="text-dark">₹{{product.price}}</span>
+                   <span class="text-decoration-line-through">₹{{product.price_not}}</span>
+                </div>
+                </a>
+              </div>
+           </div>
+        {% endfor %}
+      </div>
+</div>
+{% endblock mainbody %}
+

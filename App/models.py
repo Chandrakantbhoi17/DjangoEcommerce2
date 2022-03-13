@@ -62,3 +62,10 @@ class UserDetail(models.Model):
 class EmailOtp(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     otp=models.CharField(max_length=4)
+
+class Cart(models.Model):
+	product_id=models.CharField(max_length=100)
+	user=models.ForeignKey(User,on_delete=models.CASCADE)
+	quantity=models.PositiveIntegerField(default=0)
+	product_size=models.CharField(max_length=20,null=True,default="")
+	

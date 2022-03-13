@@ -1,0 +1,76 @@
+{% extends 'App/index.html' %}
+{% load prodfilter %}
+{% load static %}
+{% block customlink %}
+<link rel="stylesheet" href="{% static 'App/css/viewall.css' %}">
+
+{% endblock customlink %}
+{% block mainbody %}
+<div class="container-fluid p-0">
+    {% if cat %}
+      <div class="d-flex  flex-wrap justify-content-center">
+        {% for   prod in cat|GetLatest:"-1" %}
+            <div class="prodsm mt-1 ">
+              <div class="wrapper  ">
+                <a href="{% url 'productview' prod.product_id %}" class="text-decoration-none text-center ">
+                <div class="img-box ">
+                   <img src="{{prod.image.url}}" alt="" class="img-fluid img-responsive">
+                </div>
+                <div class="content-box ">
+                  <p>{{prod.productname|truncatechars:50}}</p>
+                </div>
+                <div class="price-box">
+                   <span class="text-dark">₹{{prod.price}}</span>
+                   <span class="text-decoration-line-through text-dark">₹{{prod.price_not}}</span>
+                </div>
+                </a>
+              </div>
+            
+            </div>
+      {% endfor %}
+
+    </div>
+
+    
+    
+    {% endif %}
+    {% if trend %}
+        <div class="row justify-content-center ">
+   
+        {% for   prod in trend|TrendLatest:"-1" %}
+            <div class="prodsm mt-1 ">
+              <div class="wrapper  ">
+                <a href="{% url 'productview' prod.product.product_id %}" class="text-decoration-none text-center ">
+                <div class="img-box ">
+                   <img src="{{prod.product.image.url}}" alt="" class="img-fluid img-responsive">
+                </div>
+                <div class="content-box ">
+                  <p>{{prod.product.productname|truncatechars:20}}</p>
+                </div>
+                <div class="price-box">
+                   <span class="text-danger">₹{{prod.product.price}}</span>
+                   <span class="text-decoration-line-through text-dark">₹{{prod.product.price_not}}</span>
+                </div>
+                </a>
+              </div>
+            
+            </div>
+      {% endfor %}
+
+      </div>
+    {% endif %}
+
+   
+   
+      
+    
+
+
+</div>
+{% endblock mainbody %}
+{% block customscript %}
+<script>
+    document.body.style.backgroundColor = "#e2eaef";
+</script>
+
+{% endblock customscript %}

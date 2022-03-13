@@ -1,5 +1,7 @@
 {% extends 'App/base.html' %}
 {% load static %}
+{% load prodfilter %}
+
 {% block customlink %}
 <style>
   .main_slider{
@@ -20,6 +22,10 @@
 #Trending {
   padding: 0 50px;
   position: relative;
+}
+.AllProd{
+  padding: 0 50px;
+
 }
 .wrapper{
   background: #fff;
@@ -54,7 +60,8 @@
 }
 
 .wrapper .img-box img{
-  height: 100%;
+  max-height: 100%;
+  max-width:100%;
   
 }
 .price-box span:nth-child(2){
@@ -65,30 +72,21 @@
   color: #86bd57;
 }
 .header h1{
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 2px;
   font-size: 30px;
 }
-.header span{
-  color: red;
-}
+
+
 .header a{
   color: red !important;
   position: relative;
   margin-bottom: 10px;
-  
-}
-.header a::after{
-  content: " ";
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  font-weight: 600;
 
-  width: 100%;
-  height: 4px;
   
-  background: red;
 }
+
 
 @media(max-width: 1024px){
   .control-item{
@@ -97,14 +95,11 @@
   #Trending{
     padding:0;
   }
-.wrapper{
+  .wrapper{
    
     border-radius: 6px;
-    margin: 25px 15px;
+    padding: 25px 15px;
 
-  }
-.wrapper .img-box img{
-    width: 100%;
   }
 .prodsm{
   width: 180px;
@@ -164,21 +159,23 @@
 <div class="container " id="Trend">
 <div id="Trending" class="carousel slide mt-3 " data-bs-touch="false" data-bs-interval="false">
   <div class=" text-center header">
-           <h1>Trending <span>Products</span></h1>
-           <a href="#" class="text-dark"><i class="fa-solid fa-eye mx-1"></i>View All</a>
+           <h1>Trending <span style="color:red">Products</span></h1>
+
+           <a href="{% url 'viewall' category="trend" %}" class="text-dark"><i class="fa-solid fa-eye mx-1"></i>View All</a>
+          <span></span>
   </div>
   <div class="carousel-inner ">
-     <div class="carousel-item active">
+     <div class="carousel-item active " data-bs-interval="1000">
        <div class="row ">
    
-         {% for   prod in trend%}
+         {% for   prod in trend|TrendLatest:"-1" %}
             <div class="col-sm-2 wrapper   ">
-              <a href="#" class="p-1 text-decoration-none text-center ">
+              <a href="{% url 'productview' prod.product.product_id %}" class="p-1 text-decoration-none text-center ">
                 <div class="img-box ">
                    <img src="{{prod.product.image.url}}" alt="" class="img-fluid  img-responsive">
                 </div>
                 <div class="content-box ">
-                  <p>{{prod.product.productname}}</p>
+                  <p>{{prod.product.productname|truncatechars:50}}</p>
                 </div>
                 <div class="price-box">
                    <span class="text-dark">₹{{prod.product.price}}</span>
@@ -189,7 +186,7 @@
             {% if forloop.counter|divisibleby:6 and not foloop.last %} 
          </div>
        </div>
-     <div class="carousel-item">
+     <div class="carousel-item " data-bs-interval="1000">
        <div class="row">
       {% endif %}
       {% endfor %}
@@ -206,10 +203,61 @@
 <!--carousel control end-->
 </div>
 </div>
+
+<div class="container-fluid" id="AllProd">
+  {% for cat in AllProd  %}
+  <div id="carouselExampleControlsNoTouching{{forloop.counter}}" class="AllProd carousel slide mt-5" data-bs-touch="false" data-bs-interval="false">
+  <div class=" text-center header">
+           <h1>Flash on <span style="color:red">{{cat}}</span></h1>
+           <a href="/Viewall/{{cat}}" class="text-dark"><i class="fa-solid fa-eye mx-1"></i>View All</a>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <div class="row">
+      {% for prod in cat|GetLatest:"-1" %}
+       <div class="col-sm-2 wrapper">
+        <a href="/Product/{{prod.product_id}}/" class="p-1 text-decoration-none text-center ">
+                <div class="img-box ">
+                   <img src="{{prod.image.url}}" alt="" class="img-fluid  img-responsive">
+                </div>
+                <div class="content-box ">
+                  <p>{{prod.productname}}</p>
+                </div>
+                <div class="price-box">
+                   <span class="text-dark">₹{{prod.price}}</span>
+                   <span class="text-decoration-line-through">₹{{prod.price_not}}</span>
+                </div>
+        </a>
+      </div>
+       
+         
+       {% if forloop.counter|divisibleby:7 %}
+      </div>
+    </div>
+    <div class="carousel-item ">
+      <div class="row">
+
+       {% endif %}
+
+      {% endfor %}
+      </div>
+
+    </div>
+
+    
+  </div>
+  <!--carousel control start -->
+  <a href="#"  class="carousel-control-prev control-item bg-dark" data-bs-target="#carouselExampleControlsNoTouching{{forloop.counter}}" data-bs-slide="prev"><i class="fa fa-angle-left"></i></a>
+  <a href="#" class="carousel-control-next control-item" data-bs-target="#carouselExampleControlsNoTouching{{forloop.counter}}" data-bs-slide="next"><i class="fa fa-angle-right"></i></a>
+
+  <!--carousel control end-->
+
 </div>
-<div class="container-fluid">
+{% endfor %}
   
 </div>
+</div>
+
 {% endblock mainbody %}
 {% block customscript %}
 <script type="text/javascript">
@@ -219,17 +267,17 @@
     document.getElementById('Trend').classList.add('container-fluid')
   
     document.getElementById('Trend').innerHTML=`
-    <div id="Trending" class="carousel slide mt-3 " data-bs-touch="false" data-bs-interval="false">
-  <div class=" text-center header">
+  <div id="Trending" class="carousel slide mt-3 " data-bs-touch="false" data-bs-interval="false">
+    <div class=" text-center header">
            <h1>Trending <span>Products</span></h1>
-           <a href="#" class="text-dark"><i class="fa-solid fa-eye mx-1"></i>View All</a>
+           <a href="{% url 'viewall' category="trend" %}" class="text-dark"><i class="fa-solid fa-eye mx-1"></i>View All</a>
   </div>
     <div class="row justify-content-center ">
    
-         {% for   prod in trend|slice:":4"%}
+        {% for   prod in trend|TrendLatest:"-1"|slice:":4" %}
             <div class="prodsm mt-1 ">
               <div class="wrapper  ">
-                <a href="#" class="text-decoration-none text-center ">
+                <a href="{% url 'productview' prod.product.product_id %}" class="text-decoration-none text-center ">
                 <div class="img-box ">
                    <img src="{{prod.product.image.url}}" alt="" class="img-fluid img-responsive">
                 </div>
@@ -247,7 +295,43 @@
       {% endfor %}
 
       </div>`
+      document.getElementById('AllProd').innerHTML=`
+
+      {% for cat in AllProd %}
+      <div id="Allprod{{cat}}" class="carousel slide mt-3 ">
+          <div class=" text-center header">
+           <h1>Flash on <span>{{cat}}</span></h1>
+           <a href="{% url 'viewall' cat %}" class="text-dark"><i class="fa-solid fa-eye mx-1"></i>View All</a>
+          </div>
+      </div>
+      <div class="row justify-content-center">
+        {% for product in cat|GetLatest:"-1"|slice:":4" %}
+          <div class="prodsm mt-1 ">
+              <div class="wrapper  ">
+                <a href="{% url 'productview' product.product_id %}" class="text-decoration-none text-center ">
+                <div class="img-box ">
+                   <img src="{{product.image.url}}" alt="" class="img-fluid img-responsive">
+                </div>
+                <div class="content-box ">
+                  <p>{{product.productname|truncatechars:20}}</p>
+                </div>
+                <div class="price-box">
+                   <span class="text-dark">₹{{product.price}}</span>
+                   <span class="text-decoration-line-through">₹{{product.price_not}}</span>
+                </div>
+                </a>
+              </div>
+           </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      `
 }
+
+</script>
+<script>
+
 
 </script>
 {% endblock customscript %}

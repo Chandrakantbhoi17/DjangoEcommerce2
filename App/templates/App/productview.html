@@ -1,0 +1,139 @@
+{% extends 'App/base.html' %}
+{% load static %}
+{% block customstyle %}
+<style>
+    .img-box{
+        height: 400px;
+        overflow: hidden;
+    }
+    .img-box img{
+        max-height: 100%;
+        max-width: 100% ;
+    }
+
+
+  
+
+
+</style>
+{% endblock customstyle %}
+{% block mainbody %}
+<div class="container-fluid  mt-3 ">
+   <div class="card">
+     <div class="row wrapper p-3">
+         <div class="col-md-4" style="border-right: 1px solid #e2eaef;">
+             <div class="img-box text-center">
+                <img src="{{product.image.url}}" id="zoom" alt="" class="img-fluid" data-zoom-image="{{product.image.url}}">
+             </div>
+         </div>
+         <div class="col-md-5">
+             <div class="content-box ">
+                 <h3>{{product.productname}}</h3>
+               
+             </div>
+             <div class="desc-box ">
+                 <small>{{product.Description}}</small>
+               
+             </div>
+             <div class="price-box mt-lg-4 mt-1">
+                 <span class="h4 ">₹{{product.price}}</span>
+                 <span class="h4 ms-1 text-decoration-line-through">₹{{product.price_not}}</span>
+             </div>
+             
+             {% if not  sizes  %}
+              
+              <div class="forbuying-btn mt-2 d-flex">
+                 <a href="/ordernow" class=" btn  " id="ordernow" style="background:red;font-weight:900;letter-spacing:1px">Order Now</a>
+                 <form class="ms-2" action="/addtocart" method="GET">
+                     <input type="hidden" name="prodid" value={{product.product_id}}>
+                     <input type="submit" value="Add To cart"  class="btn btn-dark">
+                 </form>
+              </div>
+               {% else %}
+               <div class="size-item mt-3">
+                 <span class="me-3" style="font-size: 25px;">Sizes: </span>
+                 {% for  size in sizes %}
+                 <span style="font-size: 18px;"> {{size.product_size}}</span>
+                  {% endfor %}
+                  <div class="forbuying-btn mt-2 d-flex">
+                      <a  class=" btn  " id="ordernow1" style="background:red;font-weight:900;letter-spacing:1px">Order Now</a>
+                      <a id="addtocart1" class=" btn-dark btn  ms-1" >Add To cart</a>
+                 </div>
+               </div>
+
+               <div id="order" style="display:none;">
+                  <span class="fw-bold">Select any Size for Order Now</span>
+                  <div id="fororder"  class="d-inline">
+                      
+                        {% for size in sizes %}
+                         <form method="GET" action="/ordernow/">
+                             
+                              <input type="hidden" name="prodid" value={{product.product_id}}>
+                              <input type="hidden" name="prodsize" value="{{size.product_size}}">
+                              <input type="submit" value="{{size.product_size}}">
+                        </form>
+                       {% endfor %}
+                    </div>
+                </div>
+                <div id="cart" style="display:none;">
+                  <span class="fw-bold">Select any Size for Order Now</span>
+                  <div id="fororder"  class="d-inline">
+                      
+                        {% for size in sizes %}
+                         <form method="GET" action="/addtocart">
+                              <input type="hidden" name="prodid" value={{product.product_id}}>
+                              <input type="hidden"  name="prodsize" value="{{size.product_size}}">
+                              <input type="submit" value="{{size.product_size}}">
+                        </form>
+                       {% endfor %}
+                </div>
+
+                
+                    
+               </div>
+
+              
+            </div>
+           {% endif %}
+             
+             
+            <div>
+                
+            </div>
+         </div>
+     </div>
+   </div>
+</div>
+
+{% endblock mainbody %}
+{% block customscript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/2.2.3/jquery.elevatezoom.min.js" integrity="sha512-UH428GPLVbCa8xDVooDWXytY8WASfzVv3kxCvTAFkxD2vPjouf1I3+RJ2QcSckESsb7sI+gv3yhsgw9ZhM7sDw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.body.style.backgroundColor = "#e2eaef";
+    $('#ordernow1').click(function(){
+        $(this).css('display','none')
+        $("#prodsize1").css('display',"block")
+        $("#order").css('display',"block")
+        $("#cart").css('display',"none")
+   
+    })
+     $('#addtocart1').click(function(){
+         $(this).css('display','none')
+         $("#prodsize1").css('display',"block")
+         $("#cart").css('display',"block")
+         $("#order").css('display',"none")
+       
+    })
+    $('#zoom').elevateZoom(
+        {
+            zoomType:"inner",
+            cursor:"crosshair",
+            zoomWindowFadeIn:800,
+            zoomWindowFadeOut:800,
+            
+
+
+        }
+    );
+</script>
+{% endblock customscript %}

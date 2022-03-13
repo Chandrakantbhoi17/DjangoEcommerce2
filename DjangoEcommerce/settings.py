@@ -73,7 +73,7 @@ TEMPLATES = [
         },
     },
 ]
-
+APPEND_SLASH=True
 WSGI_APPLICATION = 'DjangoEcommerce.wsgi.application'
 
 

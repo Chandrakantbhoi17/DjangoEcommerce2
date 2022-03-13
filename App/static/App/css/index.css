@@ -1,29 +1,11 @@
 body,html{
   
     box-sizing: border-box;
-   
     height: 100%;
+    overflow-x: hidden;
    
    
   
-}
-.viewall{
-    font-weight: 500;
-    letter-spacing: 1px;
-    color: red;
-    position: relative;
-
-}
-.viewall::after{
-    content: " ";
-    width: 100%;
-    
-    height: 3px;
-    bottom: 0;
-    position: absolute;
-    left: 0;
-    background: #000;
-
 }
 #offcanvasLeft .offcanvas-body ul li,#offcanvasLeft .offcanvas-body ul li  ul li{
     transition: 0.5s;

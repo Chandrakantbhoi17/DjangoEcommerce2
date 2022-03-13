@@ -100,6 +100,13 @@ class Product(models.Model):
 		return self.productname
 
 
+class ProductReview(models.Model):
+	user=models.ForeignKey(User,on_delete=models.CASCADE)
+	product=models.ForeignKey(Product,on_delete=models.CASCADE)
+	review=models.TextField()
+	time = models.DateTimeField(auto_now=True)
+
+
 class SellerSlider(models.Model):
 	name = models.CharField(max_length=50, default = "", null=True)
 	image = models.ImageField(upload_to='seller_slider_img')

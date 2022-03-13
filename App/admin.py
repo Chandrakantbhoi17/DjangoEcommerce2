@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import EmailOtp,UserDetail
+from .models import Cart, EmailOtp,UserDetail
 
 @admin.register(EmailOtp)
 class  OtpAdmin(admin.ModelAdmin):
@@ -7,4 +7,5 @@ class  OtpAdmin(admin.ModelAdmin):
 @admin.register(UserDetail)
 class UserDetailAdmin(admin.ModelAdmin):
     list_display=['user','is_verified']
+admin.site.register(Cart)
 
