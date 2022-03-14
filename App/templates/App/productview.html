@@ -1,5 +1,6 @@
 {% extends 'App/base.html' %}
 {% load static %}
+{% load prodfilter %}
 {% block customstyle %}
 <style>
     .img-box{
@@ -29,7 +30,6 @@
          <div class="col-md-5">
              <div class="content-box ">
                  <h3>{{product.productname}}</h3>
-               
              </div>
              <div class="desc-box ">
                  <small>{{product.Description}}</small>
@@ -46,64 +46,102 @@
                  <a href="/ordernow" class=" btn  " id="ordernow" style="background:red;font-weight:900;letter-spacing:1px">Order Now</a>
                  <form class="ms-2" action="/addtocart" method="GET">
                      <input type="hidden" name="prodid" value={{product.product_id}}>
-                     <input type="submit" value="Add To cart"  class="btn btn-dark">
+                     {% if is_already_exist %}
+                         <a href="{% url 'cart' %}" class="btn btn-dark ms-1">Go to cart</a>
+                     {% else %}
+                         <input type="submit" value="Add To cart"  class="btn btn-dark">
+                     {% endif %}
+                     
                  </form>
               </div>
+              
                {% else %}
-               <div class="size-item mt-3">
-                 <span class="me-3" style="font-size: 25px;">Sizes: </span>
-                 {% for  size in sizes %}
-                 <span style="font-size: 18px;"> {{size.product_size}}</span>
-                  {% endfor %}
-                  <div class="forbuying-btn mt-2 d-flex">
-                      <a  class=" btn  " id="ordernow1" style="background:red;font-weight:900;letter-spacing:1px">Order Now</a>
-                      <a id="addtocart1" class=" btn-dark btn  ms-1" >Add To cart</a>
-                 </div>
-               </div>
-
-               <div id="order" style="display:none;">
-                  <span class="fw-bold">Select any Size for Order Now</span>
-                  <div id="fororder"  class="d-inline">
-                      
-                        {% for size in sizes %}
-                         <form method="GET" action="/ordernow/">
-                             
-                              <input type="hidden" name="prodid" value={{product.product_id}}>
-                              <input type="hidden" name="prodsize" value="{{size.product_size}}">
-                              <input type="submit" value="{{size.product_size}}">
-                        </form>
-                       {% endfor %}
+                  <div class="size-item mt-3">
+                        <span class="me-3" style="font-size: 25px;">Sizes: </span>
+                        {% for  size in sizes %}
+                             <span style="font-size: 18px;"> {{size.product_size}},</span>
+                        {% endfor %}
+                        <div class="forbuying-btn mt-2 d-flex">
+                            <a  class="btn" id="ordernow1" style="background:red;font-weight:900;letter-spacing:1px">Order Now</a>
+                            {% if is_already_exist %}
+                            <a href="{% url 'cart' %}" class="btn btn-dark ms-1">Go to cart</a>
+                            {% else %}
+                           <a id="addtocart1" class=" btn-dark btn   ms-1" >Add To cart</a>
+                           {% endif %}
+                        </div>
                     </div>
-                </div>
-                <div id="cart" style="display:none;">
-                  <span class="fw-bold">Select any Size for Order Now</span>
-                  <div id="fororder"  class="d-inline">
-                      
-                        {% for size in sizes %}
-                         <form method="GET" action="/addtocart">
-                              <input type="hidden" name="prodid" value={{product.product_id}}>
-                              <input type="hidden"  name="prodsize" value="{{size.product_size}}">
-                              <input type="submit" value="{{size.product_size}}">
-                        </form>
-                       {% endfor %}
-                </div>
 
+                    <div id="order" style="display:none;">
+                        <span class="fw-bold">Select any Size for Order Now</span>
+                        <div id="fororder" class="d-flex">
+                            {% for size in sizes %}
+                                <form method="GET" action="/ordernow/" class="ms-1">
+                             
+                                    <input type="hidden" name="prodid" value={{product.product_id}}>
+                                    <input type="hidden" name="prodsize" value="{{size.product_size}}">
+                                    <input type="submit" style="background:red;" class="text-light" value="{{size.product_size}}">
+                               </form>
+                            {% endfor %}
+                       </div>
+                    </div>
+                    <div id="cart" style="display:none;">
+                        <span class="fw-bold">Select any Size for Cart</span>
+                        <div id="fororder" class="d-flex"  >
+                            {% for size in sizes %}
+                                 <form method="GET" action="/addtocart " class="ms-1">
+                                    <input type="hidden" name="prodid" value={{product.product_id}}>
+                                    <input type="hidden"  name="prodsize" value="{{size.product_size}}">
+                                    <input type="submit" class="bg-dark text-light"  value="{{size.product_size}}" class="d-inline">
+                                 </form>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
                 
-                    
-               </div>
+            </div>
+    <div class="col-md-3">
+          <form action="" class="mt-2" id="ReviewForm" >
+              {% csrf_token %}
+             
+            <div class="input-group flex-nowrap ">
+                <input type="hidden" name="prodid" value={{product.product_id}}>
+               
+               <input type="text" name="Review" class="form-control" placeholder="Review" >
+               <span class="input-group-text" id="Reviewbtn" id="addon-wrapping"><i class="fa-solid fa-paper-plane"></i></span>
+            </div>
+          </form>
+          <div id="review-box">
+             {% for prod in product.product_id|Reviews:6 %}
+                   <div class="review-content">
+                       <p style="font-weight:bold;">{{prod.user|capfirst}}</p>
+                       <p>{{prod.review}}</p>
+                   </div>
+                   <hr class="m-0">
+             {% endfor %}
 
               
-            </div>
-           {% endif %}
-             
-             
-            <div>
-                
-            </div>
-         </div>
-     </div>
-   </div>
+          </div>
+
+           
+
+        </div>
+            
+    </div>
+           
+        
 </div>
+      
+             
+             
+   
+    </div>
+    
+         
+        
+     </div>
+    
+</div>
+
 
 {% endblock mainbody %}
 {% block customscript %}
@@ -135,5 +173,49 @@
 
         }
     );
+  $("#Reviewbtn").click(function(){
+      let review=document.getElementsByName("Review")[0].value;
+      let csrf=document.getElementsByName("csrfmiddlewaretoken")[0].value;
+      let prodid=document.getElementsByName("prodid")[0].value;
+      let userele=document.createElement('p');
+      let ureview=document.createElement('p');
+      userele.style.fontWeight="bold";
+      ureview.style.fontWeight="600"
+
+      
+      
+      if(review!=""){
+          $.ajax({
+              url:"/addreview/",
+              method:"POST",
+              data:{"csrfmiddlewaretoken":csrf,'Review':review,'prodid':prodid},
+              
+              success:function(data){
+                  char=data.user.slice(1);
+                  p=data.user.charAt(0).toUpperCase()+char;
+                  userele.innerHTML=p;
+                  ureview.innerHTML=data.review;
+                  document.getElementsByName("Review")[0].value=""
+                
+                  document.getElementById("review-box").innerHTML=`<p class=" mt-4 text-center text-success fw-bold">Thanks for Your Valuable  FeedBack ${data.user}`
+                  
+               
+               
+                  
+                  
+
+
+
+
+                 
+                  
+              }
+              
+          })
+          
+         
+      }
+      
+  })
 </script>
 {% endblock customscript %}

@@ -1,13 +1,14 @@
 
-from itertools import product
-from unicodedata import category
+from math import prod
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect, QueryDict
+from django.db.models import Q
+from django.views import View
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, QueryDict, request
 from django.shortcuts import redirect,render
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 
-from Seller.models import Productsize, SellerSlider,Trend,Category,SubCategory
+from Seller.models import Productsize, SellerSlider,Trend,Category,SubCategory,ProductReview
 from Seller.forms import SellerSignUp
 from .forms import UserAuthenticationForm,RegisterForm
 from django.contrib import messages
@@ -44,10 +45,16 @@ def Home(request):
      return render(request,'App/index.html',{'AllProd':AllProd,'category':category,'range':range(1,5),'slider':slider,'trend':trend})
 def ProductView(request,id):
     product=Product.objects.get(product_id=id)
+    prodreview=ProductReview.objects.filter(product=product)[:2]
+    is_already_exist=False
+
+    if request.user.is_authenticated:
+        is_already_exist=Cart.objects.filter(Q(product_id=id)&Q(user=request.user)).exists()
+       
     sizes=[item for item in Productsize.objects.filter(product=product) if item.product_quantity!=0]
     
-    
-    return render(request,'App/productview.html',{'sizes':sizes,'product':product})
+     
+    return render(request,'App/productview.html',{'sizes':sizes,'product':product,'is_already_exist':is_already_exist,'prodreview':prodreview})
 
 def ViewAll(request,category):
     if category=="trend":
@@ -128,15 +135,17 @@ def cart(request):
         temptotal=i.quantity*Product.objects.filter(product_id=i.product_id).first().price
         total+=temptotal
         tax+=temptotal*int(Product.objects.filter(product_id=i.product_id)[0].gst)/100
-    for id in [ item.product_id for item in Cart.objects.all() if item.user==request.user]:
-        prod=Product.objects.filter(product_id=id)
-        products.append(prod)
+    for cartprod in [ item for item in Cart.objects.all() if item.user==request.user]:
+        prod=Product.objects.filter(product_id=cartprod.product_id).first()
+        products.append([prod,cartprod.quantity,cartprod.product_size])
+   
     data={
-        "products":products,
-        "total":total,
+        "products":products[::-1],
+        "subtotal":total,
         "tax":tax,
         "shipping":70,
-        'subtotal':total+tax+70
+        'total':total+tax+70
+
     }
     return render(request,"App/cart.html",data)
     
@@ -184,6 +193,96 @@ def Search(request):
             product.append(p)
          products=product[::-1]
     return render(request,'App/search.html',{'products':products})
+
+def RemovePd(request):
+    rmpid=request.GET.get("id")
+    
+    Cart.objects.filter(Q(product_id=rmpid)&Q(user=request.user))[0].delete()
+    total=0.0
+    products=[]
+    tax=0.0
+    for i in [item for item in Cart.objects.all() if request.user==item.user]:
+        temptotal=i.quantity*Product.objects.filter(product_id=i.product_id).first().price
+        total+=temptotal
+        tax+=temptotal*int(Product.objects.filter(product_id=i.product_id)[0].gst)/100
+
+    data={
+    
+        'subtotal':total,
+        'tax':tax,
+        'shipping':70,
+        'total':total+tax+70}
+  
+ 
+    return JsonResponse(data)
+
+def Plus_Cart(request):
+    id=request.GET.get("id")
+    
+    cart=Cart.objects.filter(Q(product_id=id)&Q(user=request.user))[0]
+    cart.quantity+=1
+    cart.save()
+
+    total=0.0
+    products=[]
+    tax=0.0
+    for i in [item for item in Cart.objects.all() if request.user==item.user]:
+        temptotal=i.quantity*Product.objects.filter(product_id=i.product_id).first().price
+        total+=temptotal
+        tax+=temptotal*int(Product.objects.filter(product_id=i.product_id)[0].gst)/100
+
+    data={
+    
+        'subtotal':total,
+        'tax':tax,
+        'shipping':70,
+        'quantity':cart.quantity,
+        'total':total+tax+70}
+  
+ 
+    return JsonResponse(data)
+def Minus_Cart(request):
+    id=request.GET.get("id")
+    
+    cart=Cart.objects.filter(Q(product_id=id)&Q(user=request.user))[0]
+    cart.quantity-=1
+    cart.save()
+
+    total=0.0
+    products=[]
+    tax=0.0
+    for i in [item for item in Cart.objects.all() if request.user==item.user]:
+        temptotal=i.quantity*Product.objects.filter(product_id=i.product_id).first().price
+        total+=temptotal
+        tax+=temptotal*int(Product.objects.filter(product_id=i.product_id)[0].gst)/100
+
+    data={
+    
+        'subtotal':total,
+        'tax':tax,
+        'shipping':70,
+        'quantity':cart.quantity,
+        'total':total+tax+70}
+  
+ 
+    return JsonResponse(data)
+@login_required
+def AddReview(request):
+    if request.method=="POST":
+        
+        
+        review=request.POST.get('Review')
+        prodid=request.POST.get("prodid")
+        
+        product=Product.objects.filter(product_id=prodid).first()
+        ProductReview(user=request.user,review=review,product=product).save()
+        data={"user":str(request.user),'review':review}
+        return JsonResponse(data)
+
+    
+        
+    
+   
     
    
     

@@ -1,5 +1,153 @@
 {% extends 'App/base.html' %}
 {% load static %}
+{% block customlink %}
+<link rel="stylesheet" href="{% static 'App/css/cart.css' %}">
+
+{% endblock customlink %}
 {% block mainbody %}
-{{subtotal}}
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col-md-8 ">
+            {% for prod in products %}
+
+              <div class="card p-4 mb-2">
+                 <div class="row">
+                    <div class="col-md-4 ">
+                        <div class="img-box text-center">
+                            <img src="{{prod.0.image.url}}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                       <a href="#" class="h5 text-decoration-none text-dark">{{prod.0.productname|truncatechars:80}}</a>
+                       <p class="card-category">Category:  {{prod.0.category}}</p>
+                       <div>
+                           <div class="float-start">
+                               <div>
+                                   <i class="fa-solid fa-square-plus plus-cart" pid={{prod.0.product_id}} ></i>
+                                   <span>{{prod.1}}</span>
+                                   <i class="fa-solid fa-square-minus minus-cart" pid={{prod.0.product_id}}></i>
+                               </div>
+                               <div class="mt-2">
+                                   <i class="fa-solid fa-indian-rupee-sign"></i>
+                                   <span class="fw-bold">{{prod.0.price}}</span>
+                               </div>
+
+                            </div>
+                            <div class="float-end">
+                                <div class="fw-bold">
+                                    <span>SIZE:</span>
+                                   
+                                    <span class="ms-1">{{prod.2}}</span>
+
+                                </div>
+                                <div>
+                                   <a  style="background:red;letter-spacing:1px;" class="Rm btn fw-bold text-light" rmpid="{{prod.0.product_id}}">Remove</a>
+                                </div>
+
+                            </div>
+
+
+                       </div>
+                    </div>
+
+              </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        <div class="col-md-4">
+            <div class="card px-2 py-3">
+                <div class="bg-light rounded-pill px-4 py-3 fw-bold">Order Summery</div>
+                <hr>
+                <div class="d-flex justify-content-between px-3">
+                    <span style="color:#576574;font-weight:600;">Subtotal</span>
+                    <span class="fw-bold"> <i class="fa-solid fa-indian-rupee-sign"></i><span id="Subtotal">{{subtotal}}</span></span>
+
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between px-3">
+                    <span style="color:#576574;font-weight:600;">Shipping</span>
+                    <span class="fw-bold"> <i class="fa-solid fa-indian-rupee-sign"></i><span id="Shipping">{{shipping}}</span></span>
+
+                </div>
+                <hr>
+                 <div class="d-flex justify-content-between px-3">
+                    <span style="color:#576574;font-weight:600;">Tax</span>
+                    <span class="fw-bold"> <i class="fa-solid fa-indian-rupee-sign"></i><span id="Tax">{{tax}}</span></span>
+                </div>
+                <hr>
+                 <div class="d-flex justify-content-between px-3">
+                    <span style="color:#576574;font-weight:600;">Total</span>
+                    <span class="fw-bold"> <i class="fa-solid fa-indian-rupee-sign"></i><span id="Total">{{total}}</span></span>
+                </div>
+                <hr>
+                <a href="" id="Rm" class="btn btn-dark rounded-pill px-2 py-2">Proceed To Checkout</a>
+                
+            </div>
+
+        </div>
+     
+
+    </div>
+
+</div>
+
 {% endblock mainbody %}
+{% block customscript %}
+<script type="text/javascript">
+    $(".Rm").click(function(){
+        var pid=$(this).attr("rmpid");
+        var ele=this
+        $.ajax({
+            url:"/RemoveProd",
+            method:"GET",
+            data:{"id":pid},
+            success:function(data){
+                document.getElementById("Total").innerHTML=data.total;
+                document.getElementById("Tax").innerHTML=data.tax;
+                document.getElementById("Subtotal").innerHTML=data.subtotal;
+                document.getElementById("Shipping").innerHTML=data.shipping;
+                ele.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+            }
+            })
+        })
+        $(".plus-cart").click(function(){
+        var pid=$(this).attr("pid");
+        var ele=this
+        $.ajax({
+            url:"/Plus_Cart",
+            method:"GET",
+            data:{"id":pid},
+            success:function(data){
+                document.getElementById("Total").innerHTML=data.total;
+                document.getElementById("Tax").innerHTML=data.tax;
+                document.getElementById("Subtotal").innerHTML=data.subtotal;
+                document.getElementById("Shipping").innerHTML=data.shipping;
+                ele.parentNode.children[1].innerHTML=data.quantity;
+            }
+            
+        })
+    })
+      $(".minus-cart").click(function(){
+        var pid=$(this).attr("pid");
+        var ele=this
+        $.ajax({
+            url:"/Minus_Cart",
+            method:"GET",
+            data:{"id":pid},
+            success:function(data){
+                document.getElementById("Total").innerHTML=data.total;
+                document.getElementById("Tax").innerHTML=data.tax;
+                document.getElementById("Subtotal").innerHTML=data.subtotal;
+                document.getElementById("Shipping").innerHTML=data.shipping;
+                ele.parentNode.children[1].innerHTML=data.quantity;
+            }
+            
+        })
+    })
+    
+    
+    
+
+</script>
+{% endblock customscript %}
